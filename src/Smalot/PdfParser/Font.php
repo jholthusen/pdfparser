@@ -639,8 +639,12 @@ class Font extends PDFObject
         // mb_convert_encoding does not support MacRoman/macintosh,
         // so we use iconv() here
         $iconvEncodingName = $this->getIconvEncodingNameOrNullByPdfEncodingName($pdfEncodingName);
-
-        return $iconvEncodingName ? iconv($iconvEncodingName, 'UTF-8//TRANSLIT//IGNORE', $text) : null;
+        if($iconvEncodingName == "CP1252"){
+            return mb_convert_encoding($text, 'UTF-8', $iconvEncodingName);
+        }
+        else{
+            return $iconvEncodingName ? iconv($iconvEncodingName, 'UTF-8//TRANSLIT//IGNORE', $text) : null;
+        }
     }
 
     /**
